@@ -1,0 +1,23 @@
+{
+  "name": "groopix",
+  "version": "1.0.0",
+  "description": "webService for a shared photo albums application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vandervidi/GrooPix.git"
+  },
+  "author": "Vidran Abdovich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vandervidi/GrooPix/issues"
+  },
+  "homepage": "https://github.com/vandervidi/GrooPix#readme",
+  "dependencies": {
+    "express": "^4.13.3",
+    "mongoose": "^4.1.8"
+  }
+}
