@@ -18,9 +18,13 @@
 //                        \/     \/\______|    \/                     
 
 
-var fbAppId = 684914754979228;  //SongThief Facebook application ID.
+var fbAppId = 684914754979228;  //GrooPix Facebook application ID.
 
 var dao = require('./dao');
+var users = require('./dao/users');
+var albums = require('./dao/albums');
+
+var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 app.listen(8080);
@@ -34,14 +38,13 @@ app.use(function(req,res,next){
 });
 
 
-// Express router
+// Express routers
 
 // Route to return the GrooPix Facebook application ID number.
-app.post('/getAppId' ,function(req, res){
+app.post('/getAppId' , function(req, res){
 	res.json({appId: fbAppId});
 });
 
-// Route that handles a user login
-app.post('/connect' , users.connect ,function(req, res){
+app.post('/connect', users.connect, function(req, res){
 });
 

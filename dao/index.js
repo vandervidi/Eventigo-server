@@ -14,12 +14,12 @@ exports.Album = mongoose.model('albumM' , albumSchema);
 // Mongoose connection instance object
 var conn = mongoose.connection;
 
-// Print error message 
+// Report Mongoose connection errors
 conn.on('error', function(err){
   console.log('connection error:' + err);
 });
 
-// Once a connection is initiated - do the following
+// On connection event handler
 conn.once('open' , function(){
   console.log('connected to mongoLab');
   
