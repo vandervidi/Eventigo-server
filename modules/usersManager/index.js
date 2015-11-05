@@ -3,9 +3,9 @@ var User = dao.User;
 
 
 exports.register = function(req, res){
-	var query = {userId: req.body.userInfo.id};
+	var query = {_id: req.body.userInfo.id};
 	var update = {
-		userId: req.body.userInfo.id ,  // Facebook userID
+		_id: req.body.userInfo.id ,  // Facebook userID
 		name: req.body.userInfo.name, // user's Facebook name
 		profilePicture: req.body.userInfo.profilePic,  // Facebook user profile picture URL
 	};

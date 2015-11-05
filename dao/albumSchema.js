@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
-var schema = mongoose.Schema;
-var albumSchema = new schema({
+var Schema = mongoose.Schema;
+var albumSchema = new Schema({
 
 	activeStatus: {type: Boolean, default: true},
 	creationDate: {type: Date, required :true},
-	owner: {type: String, required :true},  // This is the owner's user ID
+	_creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
 
 	title: {type: String, default: 'ALBUM NAME', required :true},
 	location: {
