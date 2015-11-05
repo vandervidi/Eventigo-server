@@ -37,6 +37,7 @@ app.use(function(req,res,next){
 	next();
 });
 
+app.use(express.static(process.cwd() + '/public'));
 
 // Express routers
 
