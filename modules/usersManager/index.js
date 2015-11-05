@@ -1,5 +1,4 @@
-var dao = require('../../dao');
-var User = dao.User;
+var User = require('../../dao').User;
 
 
 exports.register = function(req, res){

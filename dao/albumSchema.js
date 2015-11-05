@@ -6,7 +6,7 @@ var albumSchema = new Schema({
 	creationDate: {type: Date, required :true},
 	_creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
 
-	title: {type: String, default: 'ALBUM NAME', required :true},
+	title: {type: String, required :true, default: 'ALBUM NAME'},
 	location: {
 		country: {type: String, default: ''},
 		city: {type: String, default: ''},
@@ -14,16 +14,16 @@ var albumSchema = new Schema({
 	},
 
 	photos:[{
-		url: {type: String, required :true, unique: true},
-		owner: {type: String, required :true},
+		url: {type: String, unique: true, required :true, default: ''},
+		_creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
 		creationDate: {type: Date, required :true},
 		rating: {
-			positive: {type: [String], default: []}, // Array of users ID's
-			negative: {type: [String], default: []}	 // Array of users ID's
+			positive: [{ type: Number, ref:'userM', default: [] }], // Array of users ID's
+			negative: [{ type: Number, ref:'userM', default: [] }]	 // Array of users ID's
 		}
 	}],
 
-	participants: {type: [String], default: []} 	// Array of users ID's that 
+	participants: [{ type: Number, ref:'userM', default: [] }] 	// Array of users ID's that 
 }, {collection: 'albums'});
 
 exports.albumSchema = albumSchema;
