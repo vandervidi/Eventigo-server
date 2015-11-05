@@ -1,23 +1,29 @@
 var mongoose = require('mongoose');
 
+
 // Configuring connection to mongoLab
-mongoose.connect('mongodb://vandervidi:vandervidi87@ds055862.mongolab.com:55862/heroku_9ddcq9zq');
+mongoose.connect('mongodb://admin:admin@ds055752.mongolab.com:55752/heroku_4w5lbvj6');
+
 
 // Import schema modules
-var userSchema = require('./users/userSchema').userSchema;
-var albumSchema = require('./albums/albumSchema').albumSchema;
+var userSchema = require('./userSchema').userSchema;
+var albumSchema = require('./albumSchema').albumSchema;
+
 
 // Configure the imported schema as a model and give it an alias
 exports.User = mongoose.model('userM' , userSchema);
 exports.Album = mongoose.model('albumM' , albumSchema);
 
+
 // Mongoose connection instance object
 var conn = mongoose.connection;
+
 
 // Report Mongoose connection errors
 conn.on('error', function(err){
   console.log('connection error:' + err);
 });
+
 
 // On connection event handler
 conn.once('open' , function(){
