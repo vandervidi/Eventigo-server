@@ -35,3 +35,6 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
 //	Creating a new photo album
  app.post('/createNewAlbum', albumsManager.createNewAlbum);
+
+ //	get list of user's albums
+ app.post('/getUserAlbums', albumsManager.getUserAlbums);

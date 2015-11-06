@@ -4,7 +4,7 @@ var Album = require('../../dao').Album;
 exports.createNewAlbum = function(req, res){
 	
 	var album = new Album({
-		_creator: req.body.creator,
+		creator: req.body.creator,
 		name: req.body.albumData.name,
 		date: req.body.albumData.date,
 		location: req.body.albumData.location
@@ -25,5 +25,11 @@ exports.createNewAlbum = function(req, res){
 
 //	Retrieves all user albums
 exports.getUserAlbums = function(req, res){
-
+	Album.find().select('creationDate name coverPhoto location').where('creator', req.body.userId).exec(function(err,results){
+		if(err){
+			res.status(200).json({success: 0});
+			return;
+		}
+		res.status(200).json({success: 1, data: results});
+	}); 
 };
