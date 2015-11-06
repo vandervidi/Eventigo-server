@@ -8,11 +8,12 @@ mongoose.connect('mongodb://admin:admin@ds055752.mongolab.com:55752/heroku_4w5lb
 // Import schema modules
 var userSchema = require('./userSchema').userSchema;
 var albumSchema = require('./albumSchema').albumSchema;
-
+var commentSchema = require('./commentSchema').commentSchema;
 
 // Configure the imported schema as a model and give it an alias
 exports.User = mongoose.model('userM' , userSchema);
 exports.Album = mongoose.model('albumM' , albumSchema);
+exports.Comment = mongoose.model('commentM', commentSchema);
 
 
 // Mongoose connection instance object

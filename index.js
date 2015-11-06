@@ -9,6 +9,7 @@
 
 
 var usersManager = require('./modules/usersManager');
+var albumsManager = require('./modules/albumsManager');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
@@ -29,5 +30,8 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
 
 //	Router
+//	Register a new user - first facebook login
  app.post('/registerUser', usersManager.register);
 
+//	Creating a new photo album
+ app.post('/createNewAlbum', albumsManager.createNewAlbum);

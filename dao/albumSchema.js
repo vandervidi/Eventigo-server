@@ -3,24 +3,20 @@ var Schema = mongoose.Schema;
 var albumSchema = new Schema({
 
 	activeStatus: {type: Boolean, default: true},
-	creationDate: {type: Date, required :true},
+	creationDate: {type: Date, default: Date.now},
 	_creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
 
-	title: {type: String, required :true, default: 'ALBUM NAME'},
-	location: {
-		country: {type: String, default: ''},
-		city: {type: String, default: ''},
-		street: {type: String, default: ''}
-	},
+	name: {type: String, required :true, default: 'ALBUM NAME'},
+	location: {type: String, default: ''},
 
 	photos:[{
+		_owner: {type: Number, ref:'userM' , required :true, default: -1},  // This is the owner's user ID
 		url: {type: String, unique: true, required :true, default: ''},
-		_creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
-		creationDate: {type: Date, required :true},
+		creationDate: {type: Date, default: Date.now},
 		rating: {
-			positive: [{ type: Number, ref:'userM', default: [] }], // Array of users ID's
-			negative: [{ type: Number, ref:'userM', default: [] }]	 // Array of users ID's
-		}
+			positive: [{ type: Number, ref:'userM', default: [] }] // Array of users ID's
+		},
+		comments: [{type: Schema.Types.ObjectId, ref: 'commentM', default: []}]
 	}],
 
 	participants: [{ type: Number, ref:'userM', default: [] }] 	// Array of users ID's that 
