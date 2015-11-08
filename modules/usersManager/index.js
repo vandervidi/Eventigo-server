@@ -2,6 +2,7 @@ var User = require('../../dao').User;
 
 
 exports.register = function(req, res){
+	
 	var query = {_id: req.body.userInfo.id};
 	var update = {
 		_id: req.body.userInfo.id ,  // Facebook userID
@@ -10,7 +11,7 @@ exports.register = function(req, res){
 	};
 	var options = {
 		upsert: true,	//	Create a new document if the query finds zero documents matching the query.
-		setDefaultsOnInsert : true	//	When creating a new document, include schema default values
+		setDefaultsOnInsert : true	//	When creating a new document, include schema default values. 
 	};
 
 	User.findOneAndUpdate(query, update, options).then(function(doc){

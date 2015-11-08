@@ -13,12 +13,13 @@ exports.createNewAlbum = function(req, res){
 	album.save()
 	.then(function(doc){
 		console.log("successfully saved new album!");
-		res.status(200).json({success: 1});
+		res.status(200).json({success: true});
 	},
 	//	Error while saving
 	function(err){
 		console.log("There was an error while saving new album object to mongo");
 		console.log(err);
+		res.status(200).json({success: false});
 	});
 	
 };
@@ -26,10 +27,11 @@ exports.createNewAlbum = function(req, res){
 //	Retrieves all user albums
 exports.getUserAlbums = function(req, res){
 	Album.find().select('creationDate name coverPhoto location').where('creator', req.body.userId).exec(function(err,results){
-		if(err){
-			res.status(200).json({success: 0});
-			return;
+		if(!err){
+			res.status(200).json({success: true, data: results});
+		}else{
+			res.status(200).json({success: false});
 		}
-		res.status(200).json({success: 1, data: results});
+
 	}); 
 };
