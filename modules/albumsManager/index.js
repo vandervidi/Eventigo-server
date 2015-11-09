@@ -72,6 +72,6 @@ exports.uploadPhotoToAlbum = function(req, res){
 	// 	function(result) {
 	// 		console.log(result)
 	// 	});
-console.log(res.body.photoUri)
+console.log(req.body.photoUri)
 
 }
