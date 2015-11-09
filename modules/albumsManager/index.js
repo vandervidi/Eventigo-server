@@ -1,6 +1,6 @@
 var Album = require('../../dao').Album;
 var cloudinary = require('cloudinary');
-var cloudinaryConfig = require('../../modules/cloudinaryConfig');
+var cloudinaryConfig = require('../../modules/cloudinaryConfig').config;
 cloudinary.config(cloudinaryConfig);
 
 /**
