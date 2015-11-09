@@ -23,9 +23,10 @@ app.listen(process.env.PORT || 8080 , function(){
 app.use(cors());
 
 //  Setting up the Body-Parser library
-app.use(bodyParser.json());         //	to support JSON-encoded bodies
+app.use(bodyParser.json({limit: '5mb'}));         //	to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
-  extended: true
+  extended: true,
+  limit: '5mb'
 })); 
 
 
