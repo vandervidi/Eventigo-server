@@ -84,6 +84,7 @@ exports.uploadPhotoToAlbum = function(req, res){
 			//	Save the photo to the relevant album
 			Album.findById(req.body.albumId).exec(function(err, doc){
 				if (!err){
+					console.log('Album FOUND!, Modifying...');
 					//	Edit the found document
 					doc.photos.push({
 						owner: req.body.photoOwner,
@@ -97,10 +98,12 @@ exports.uploadPhotoToAlbum = function(req, res){
 					doc.save().then(
 						//	success calback
 						function(success){
+							console.log('Album SAVED!');
 							res.status(200).json({success: true, data: "some data??????????/"});
 						},
 						//	error callback
 						function(err){
+							console.log('ERROR saving album');
 							res.status(200).json({success: false});
 						});
 				
