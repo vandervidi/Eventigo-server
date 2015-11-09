@@ -41,3 +41,6 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
  // Get album by id
  app.post('/getAlbumById', albumsManager.getAlbumById);
+
+ //	Upload a photo to an album
+ app.post('/uploadPhotoToAlbum', albumsManager.uploadPhotoToAlbum);

@@ -1,5 +1,7 @@
 var Album = require('../../dao').Album;
-
+var cloudinary = require('cloudinary');
+var cloudinaryConfig = require('../../modules/cloudinaryConfig');
+cloudinary.config(cloudinaryConfig);
 
 /**
 Creates a new album for a user
@@ -61,4 +63,14 @@ exports.getAlbumById = function(req, res){
 			res.status(200).json({success: false});
 		}
 	});
+}
+
+exports.uploadPhotoToAlbum = function(req, res){
+	console.log('uploading a picture to cloudinary');
+	cloudinary.uploader.upload('data:image/gif;base64,' + res.body.photoUri, 
+		//	success callback
+		function(result) {
+			console.log(result)
+		});
+
 }

@@ -1,7 +1,7 @@
 {
-  "name": "groopix",
+  "name": "snapify",
   "version": "1.0.0",
-  "description": "webService for a shared photo albums application",
+  "description": "webService for a collaborative photo albums application",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,11 +13,12 @@
   "author": "Vidran Abdovich",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vandervidi/GrooPix/issues"
+    "url": "https://github.com/vandervidi/Snapify/issues"
   },
-  "homepage": "https://github.com/vandervidi/GrooPix#readme",
+  "homepage": "https://github.com/vandervidi/Snapify#readme",
   "dependencies": {
     "body-parser": "^1.14.0",
+    "cloudinary": "^1.2.5",
     "cors": "^2.7.1",
     "express": "^4.13.3",
     "mongoose": "^4.1.8"
