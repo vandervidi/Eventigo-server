@@ -67,10 +67,11 @@ exports.getAlbumById = function(req, res){
 
 exports.uploadPhotoToAlbum = function(req, res){
 	console.log('uploading a picture to cloudinary');
-	cloudinary.uploader.upload('data:image/gif;base64,' + res.body.photoUri, 
-		//	success callback
-		function(result) {
-			console.log(result)
-		});
+	// cloudinary.uploader.upload('data:image/gif;base64,' + res.body.photoUri, 
+	// 	//	success callback
+	// 	function(result) {
+	// 		console.log(result)
+	// 	});
+console.log(res.body.photoUri)
 
 }
