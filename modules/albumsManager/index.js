@@ -58,21 +58,60 @@ exports.getAlbumById = function(req, res){
 	console.log("Getting album by id");
 	Album.findById(req.body.id).exec(function(err, doc){
 		if(!err){
-			res.status(200).json({success: true, data: doc})
+			res.status(200).json({success: true, data: doc});
 		}else{
 			res.status(200).json({success: false});
 		}
 	});
 }
 
+	
+/**
+Upload a base64 photo string to Cloudinary and save the returned photo URL in the album's document
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.uploadPhotoToAlbum = function(req, res){
 	console.log('uploading a picture to cloudinary');
+	//	Uploading the photo to Cloudinary
 	cloudinary.uploader.upload('data:image/gif;base64,' + req.body.photoUri, 
 		//	success callback
-		function(result) {
-
+		function(cloudinaryResult) {
 			console.log("Upladed successfully a picture to cloudinary!");
-			console.log(result)
+			console.log(cloudinaryResult);
+
+
+			//	Save the photo to the relevant album
+			Album.findById(req.body.albumId).exec(function(err, doc){
+				if (!err){
+					//	Edit the found document
+					doc.photos.push({
+						owner: req.body.photoOwner,
+						url: cloudinaryResult.url
+						//	The remaining variables will be 
+						//	created using their default valuse predefines int 
+						//	the album schema
+					});
+
+					//	Save the changes
+					doc.save().then(
+						//	success calback
+						function(success){
+							res.status(200).json({success: true, data: "some data??????????/"});
+						},
+						//	error callback
+						function(err){
+							res.status(200).json({success: false});
+						});
+				
+				//	Error while getting an album by id	
+				}else{
+					console.log('Error : Could not find the desired album');
+					console.log(err);
+					res.status(200).json({success: false});
+				}
+
+			});
 		});
 
 }
