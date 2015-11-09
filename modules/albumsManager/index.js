@@ -1,6 +1,11 @@
 var Album = require('../../dao').Album;
 
-//	Creates a new album for a user
+
+/**
+Creates a new album for a user
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.createNewAlbum = function(req, res){
 	
 	var album = new Album({
@@ -22,11 +27,16 @@ exports.createNewAlbum = function(req, res){
 		res.status(200).json({success: false});
 	});
 	
-};
+}
 
-//	Retrieves all user albums
+
+/**
+Retrieves all user albums
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.getUserAlbums = function(req, res){
-	Album.find().select('creationDate name coverPhoto location').where('creator', req.body.userId).exec(function(err,results){
+	Album.find().select('_id creationDate name coverPhoto location').where('creator', req.body.userId).exec(function(err,results){
 		if(!err){
 			res.status(200).json({success: true, data: results});
 		}else{
@@ -34,4 +44,21 @@ exports.getUserAlbums = function(req, res){
 		}
 
 	}); 
-};
+}
+
+	
+/**
+Retrieves an album by id
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.getAlbumById = function(req, res){
+	console.log("Getting album by id");
+	Album.findById(req.body.id).exec(function(err, doc){
+		if(!err){
+			res.status(200).json({success: true, data: doc})
+		}else{
+			res.status(200).json({success: false});
+		}
+	});
+}

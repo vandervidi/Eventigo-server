@@ -38,3 +38,6 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
  //	get list of user's albums
  app.post('/getUserAlbums', albumsManager.getUserAlbums);
+
+ // Get album by id
+ app.post('/getAlbumById', albumsManager.getAlbumById);

@@ -1,6 +1,10 @@
 var User = require('../../dao').User;
 
-
+/**
+A function that handles a new user registration
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.register = function(req, res){
 	
 	var query = {_id: req.body.userInfo.id};
