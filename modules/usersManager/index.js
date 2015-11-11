@@ -24,7 +24,7 @@ exports.register = function(req, res){
 
 	User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
 		if(!err){
-			console.log('REGISTERED!: ' , JSON.Stringify(doc));
+			console.log('REGISTERED!: ' , JSON.stringify(doc));
 			res.status(200).json({'success': true, 'doc': doc});
 		}else{
 			console.log(err);
