@@ -7,12 +7,15 @@ A function that handles a new user registration
 */
 exports.register = function(req, res){
 	console.log('ATTEMPT to register a user with facebook id: ' + req.body.userInfo.id);
+
 	var query = {'_id': req.body.userInfo.id};
+
 	var update = {
 		'_id': req.body.userInfo.id ,  // Facebook userID
 		'name': req.body.userInfo.name, // user's Facebook name
 		'profilePicture': req.body.userInfo.profilePic,  // Facebook user profile picture URL
 	};
+	
 	var options = {
 		upsert: true,	//	Create a new document if the query finds zero documents matching the query.
 		setDefaultsOnInsert : true	//	When creating a new document, include schema default values. 
