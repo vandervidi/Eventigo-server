@@ -17,7 +17,7 @@ exports.register = function(req, res){
 	};
 
 	var options = {
-		upsert: true,	//	Create a new document if the query finds zero documents matching the query.
+	//	upsert: true,	//	Create a new document if the query finds zero documents matching the query.
 		setDefaultsOnInsert : true,	//	When creating a new document, include schema default values. 
 		new: true
 	};
