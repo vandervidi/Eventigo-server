@@ -15,10 +15,11 @@ exports.register = function(req, res){
 		'name': req.body.userInfo.name, // user's Facebook name
 		'profilePicture': req.body.userInfo.profilePic,  // Facebook user profile picture URL
 	};
-	
+
 	var options = {
 		upsert: true,	//	Create a new document if the query finds zero documents matching the query.
-		setDefaultsOnInsert : true	//	When creating a new document, include schema default values. 
+		setDefaultsOnInsert : true,	//	When creating a new document, include schema default values. 
+		new: true
 	};
 
 	User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
