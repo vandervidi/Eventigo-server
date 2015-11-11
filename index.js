@@ -20,9 +20,10 @@ app.listen(process.env.PORT || 8080 , function(){
 
 //  Express.Use function means => Run this on ALL requests.(Middlewares) 
 //	Setting CORS middleware
-app.use(cors());
+app.use( cors() );
 
 //  Setting up the Body-Parser library
+//	Manually setting data size limit to handle large picture sizes
 app.use(bodyParser.json({limit: '5mb'}));         //	to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
   extended: true,
@@ -38,10 +39,13 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
  app.post('/createNewAlbum', albumsManager.createNewAlbum);
 
  //	get list of user's albums
- app.post('/getUserAlbums', albumsManager.getUserAlbums);
+ app.post('/getUserAlbums', usersManager.getUserAlbums);
 
  // Get album by id
  app.post('/getAlbumById', albumsManager.getAlbumById);
 
  //	Upload a photo to an album
  app.post('/uploadPhotoToAlbum', albumsManager.uploadPhotoToAlbum);
+
+ //	Join an existing album
+ app.post('/joinAlbum', usersManager.joinAlbum);
