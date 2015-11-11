@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 
 // Configuring connection to mongoLab
-mongoose.connect('mongodb://admin:admin@ds047524.mongolab.com:47524/heroku_2rscs62w');
+mongoose.connect('mongodb://admin:admin@ds053784.mongolab.com:53784/snapify');
 
 
 // Import schema modules

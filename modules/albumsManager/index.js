@@ -127,9 +127,10 @@ exports.uploadPhotoToAlbum = function(req, res){
 					doc.save(function(err, doc){
 						if(!err){
 							console.log('Album SAVED!');
-							res.status(200).json({success: true, data: "some data??????????/"});
+							res.status(200).json({success: true, data: doc});
 						}else{
 							console.log('ERROR saving album');
+							console.log(err);
 							res.status(200).json({success: false});
 						}
 					})
