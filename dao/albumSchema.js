@@ -3,6 +3,8 @@
 var shortid = require('shortid');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
+
 var albumSchema = new Schema({
 
 	shortId: {type: String, unique: true, default: shortid.generate()},

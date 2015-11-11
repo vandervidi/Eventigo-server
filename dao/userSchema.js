@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
 
 	//	index: true => Tells mongo to index this paramater because it is used frequently. It makes querying faster
-	_id: Number,  // Facebook userID
+	_id: {type:Number, unique: true},  // Facebook userID
 	name: {type: String, default: '', required: true}, // user's Facebook name
 	profilePicture: {type: String, required: true},  // Facebook user profile picture URL
 	registrationDate: { type: Date, default: Date.now },  // a timestamp, default: current time
