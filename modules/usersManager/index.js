@@ -22,12 +22,7 @@ exports.register = function(req, res){
 		new: true
 	};
 
-	//User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
-		User.insert({
-		'_id': req.body.userInfo.id ,  // Facebook userID
-		'name': req.body.userInfo.name, // user's Facebook name
-		'profilePicture': req.body.userInfo.profilePic,  // Facebook user profile picture URL
-	}).exec(function(err ,doc){
+	User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
 		if(!err){
 			console.log('REGISTERED!: ' , JSON.stringify(doc));
 			res.status(200).json({'success': true, 'doc': doc});
