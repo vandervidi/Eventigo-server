@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vandervidi/Snapify#readme",
   "dependencies": {
+    "big-integer": "^1.6.7",
     "big-number": "^0.3.1",
     "body-parser": "^1.14.0",
     "cloudinary": "^1.2.5",

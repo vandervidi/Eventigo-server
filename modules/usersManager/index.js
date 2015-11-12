@@ -1,6 +1,6 @@
 var User = require('../../dao').User;
 var Album = require('../../dao').Album;
-var BigNumber = require('big-number').n;
+var bigInt = require("big-integer")
 
 /**
 A function that handles a new user registration
@@ -13,7 +13,7 @@ exports.register = function(req, res){
 	var query = {'_id': req.body.userInfo.id};
 
 	var update = {
-		'_id': BigNumber(req.body.userInfo.id) ,  // Facebook userID
+		'_id': bigInt(req.body.userInfo.id, 10) ,  // Facebook userID
 		'name': req.body.userInfo.name, // user's Facebook name
 		'profilePicture': req.body.userInfo.profilePic,  // Facebook user profile picture URL
 	};
