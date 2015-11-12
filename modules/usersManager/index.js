@@ -1,5 +1,6 @@
 var User = require('../../dao').User;
 var Album = require('../../dao').Album;
+var Promise = require("bluebird");
 
 
 /**
