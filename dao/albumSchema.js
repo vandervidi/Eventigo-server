@@ -13,7 +13,7 @@ var albumSchema = new Schema({
 
 	creationDate: {type: Date, default: Date.now},
 
-	creator: {type: Number, ref:'userM' , required :true},  // This is the owner's user ID
+	creator: {type: String, ref:'userM' , required :true},  // This is the owner's user ID
 
 	name: {type: String, required :true, default: 'ALBUM NAME'},
 
@@ -25,23 +25,20 @@ var albumSchema = new Schema({
 
 	photos:[{
 
-			owner: {type: Number, ref:'userM' , default: -1},  // This is the owner's user ID
+			owner: {type: String, ref:'userM' , default: -1},  // This is the owner's user ID
 
 			url: {type: String, default: ''},
 
 			creationDate: {type: Date, default: Date.now},
 
-			rating: {
-				positive: [{ type: Number, ref:'userM'}] // Array of users ID's
-			},
-
-
+			likes: [{ type: String, ref:'userM'}], // Array of users ID's
+			
 			comments: [{type: Schema.Types.ObjectId, ref: 'commentM'}]
 
 	}],
 
 
-	participants: [{ type: Number, ref:'userM'}] 	// Array of users ID's that 
+	participants: [{ type: String, ref:'userM'}] 	// Array of users ID's that 
 	
 }, {collection: 'albums'});
 
