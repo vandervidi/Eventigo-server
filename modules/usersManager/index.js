@@ -77,6 +77,9 @@ exports.joinAlbum = function(req, res){
 	//	Add the user ID to album's participants array
 	promise.then(function(albumDoc){
 		console.log('Then #1');
+		console.log(req.body.shortId)
+		console.log(albumDoc)
+		
 		//	Check if the user already is a participant in this album...
 		if(albumDoc.participants.indexOf(req.body.userId) === -1){
 			albumDoc.participants.push(req.body.userId);
