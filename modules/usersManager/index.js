@@ -7,6 +7,7 @@ A function that handles a new user registration
 */
 exports.register = function(req, res){
 	console.log('ATTEMPT to register a user with facebook id: ' + req.body.userInfo.id);
+	console.log('ATTEMPT to register a user with facebook id: ' + req.body.userInfo.id);
 
 	var query = {'_id': req.body.userInfo.id};
 

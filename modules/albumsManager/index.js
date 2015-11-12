@@ -10,13 +10,12 @@ var cloudinaryConfig = require('../../modules/cloudinaryConfig').config;
 //	Initializing Cloudinary configurations
 cloudinary.config(cloudinaryConfig);
 
+
 /**
 Creates a new album for a user
 @param {object} - http request object
 @param {object} - http response object
 */
-
-
 //###################################################################################
 //	CALLBACK HELL !!! REWRITE THIS METHOD - divide callbacks to individual functions
 //###################################################################################
