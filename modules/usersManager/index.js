@@ -4,6 +4,7 @@ var Album = require('../../dao').Album;
 
 /**
 A function that handles a new user registration
+
 @param {object} - http request object
 @param {object} - http response object
 */
@@ -13,13 +14,13 @@ exports.register = function(req, res){
 	var query = {'_id': req.body.userInfo.id};
 
 	var update = {
-		'_id': req.body.userInfo.id ,  // Facebook userID
-		'name': req.body.userInfo.name, // user's Facebook name
-		'profilePicture': req.body.userInfo.profilePic,  // Facebook user profile picture URL
+		'_id': req.body.userInfo.id ,  					// Facebook userID
+		'name': req.body.userInfo.name, 				// user's Facebook name
+		'profilePicture': req.body.userInfo.profilePic, // Facebook user profile picture URL
 	};
 
 	var options = {
-		upsert: true,	//	Create a new document if the query finds zero documents matching the query.
+		upsert: true,				//	Create a new document if the query finds zero documents matching the query.
 		setDefaultsOnInsert : true,	//	When creating a new document, include schema default values. 
 		new: true
 	};
@@ -72,24 +73,34 @@ exports.joinAlbum = function(req, res){
 	//	Get the album ID.
 	Album.findOne().where({'shortId': req.body.shortId}).exec(function(err, albumDoc){
 		if(!err){
-			console.log('###################   ALBUM DOC')
-			console.log(albumDoc);
-			// Save the album ID in the user's albums array
-			User.findOne().where({'_id': req.body.userId}).exec(function(err, userDoc){
-				console.log('###################   USER DOC')
-			console.log(userDoc);
-					//	Push to albums array
-					userDoc.albums.unshift(albumDoc._id);
-					//	Save
-					userDoc.save(function(err, modifiedUserDoc){
-						if(!err){
-							res.status(200).json({success: true});
-						}else{
-							console.log('There was an error saving the user document');
-							res.status(200).json({success: false});
-						}
-					});
-				});
+			console.log("######### JOIN ALBUM ########")
+			//	Add the user to the album participants array
+			albumDoc.participants.push(req.body.userId);
+			//	save changes
+			albumDoc.save(function(err, newAlbumdoc){
+				if(!err){
+
+						// Save the album ID in the user's albums array
+						User.findById(req.body.userId).exec(function(err, userDoc){
+							//	Push to albums array
+							userDoc.albums.unshift(albumDoc._id);
+							//	Save
+							userDoc.save(function(err, modifiedUserDoc){
+								if(!err){
+									res.status(200).json({success: true});
+								}else{
+									console.log('There was an error saving the user document');
+									res.status(200).json({success: false});
+								}
+							});
+						});
+
+				}else{
+					console.log('There was an error adding the user to albums participants array and saving changes');
+					res.status(200).json({success: false});
+				}
+			});
+
 
 		}else{
 			console.log('There was an error finding the wanted album');
