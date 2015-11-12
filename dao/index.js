@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-
+// set Promise provider to bluebird
+mongoose.Promise = require('bluebird');
 
 // Configuring connection to mongoLab
 mongoose.connect('mongodb://admin:admin@ds053784.mongolab.com:53784/snapify');

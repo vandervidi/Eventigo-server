@@ -1,6 +1,6 @@
 var User = require('../../dao').User;
 var Album = require('../../dao').Album;
-var Promise = require("bluebird");
+
 
 
 /**
@@ -70,38 +70,51 @@ We recieve a short code representing an album.
 @param {object} - http response object
 */
 exports.joinAlbum = function(req, res){
+	var album;
 	//	Find the album that the user wants to join
 	var promise = Album.findOne().where({'shortId': req.body.shortId}).exec();
 
 	//	Add the user ID to album's participants array
 	promise.then(function(albumDoc){
+		console.log('Then #1');
 		//	Check if the user already is a participant in this album...
-		if(albumDoc.participants.indexOf(req.body.userId) > -1){
+		if(albumDoc.participants.indexOf(req.body.userId) === -1){
 			albumDoc.participants.push(req.body.userId);
 		}else{
-			throw new Error("ERROR: User with id " + req.body.userId + " is already a participant in this album");
+			console.log("Throwing new error");
+			throw new "ERROR: User with id " + req.body.userId + " is already a participant in this album";
 		}
 		return albumDoc.save();
 	})
 
 	//	Find the user that wants to join the album
-	.then(function(){
+	.then(function(albumDoc){
+		console.log('Then #2');
+		album = albumDoc;
 		return User.findById(req.body.userId).exec();
 	})
 
 	// Save the album ID in the user's albums array
 	.then(function(userDoc){
-		userDoc.albums.unshift(albumDoc._id);
+		console.log('Then #3');
+		if(userDoc.albums.indexOf(album._id) === -1){
+			userDoc.albums.unshift(album._id);
+		}
+		else{
+			throw "This user is already a participant in this album"
+		}
 		return userDoc.save();
 	})
 
 	//	Return a response
-	.then(function(){
-		res.status(200).json({success: true});
+	.then(function(savedUserDoc){
+		console.log('Then #4');
+		res.status(200).json({success: true, albumId: album._id});
 	})
 
 	//	Error handler
 	.catch(function(err){
+		console.log('Catch #1');
 		console.log(err);
 		res.status(200).json({success: false});
 	});
