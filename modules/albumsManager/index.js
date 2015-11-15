@@ -116,7 +116,7 @@ exports.uploadPhotoToAlbum = function(req, res){
 					//	Edit the found document
 					doc.photos.push({
 						owner: req.body.photoOwner,
-						url: cloudinaryResult.url
+						url: cloudinaryResult.public_id + ".jpg"
 						//	The remaining variables will be 
 						//	created using their default valuse as predefined in 
 						//	the album schema
