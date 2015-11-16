@@ -106,42 +106,47 @@ exports.uploadPhotoToAlbum = function(req, res){
 	cloudinary.uploader.upload('data:image/gif;base64,' + req.body.photoUri, 
 		//	success callback
 		function(cloudinaryResult) {
-			console.log("Upladed successfully a picture to cloudinary!");
-			console.log(cloudinaryResult);
+			if(!cloudinaryResult.error){	
+				console.log("Upladed successfully a picture to cloudinary!");
 
-			//	Save the photo to the relevant album
-			Album.findById(req.body.albumId).exec(function(err, doc){
-				if (!err){
-					console.log('Album FOUND!, Modifying...');
-					//	Edit the found document
-					doc.photos.push({
-						owner: req.body.photoOwner,
-						url: cloudinaryResult.public_id + ".jpg"
-						//	The remaining variables will be 
-						//	created using their default valuse as predefined in 
-						//	the album schema
-					});
+				//	Save the photo to the relevant album
+				Album.findById(req.body.albumId).exec(function(err, doc){
+					if (!err){
+						console.log('Album FOUND!, Modifying...');
+						//	Edit the found document
+						doc.photos.push({
+							owner: req.body.photoOwner,
+							url: cloudinaryResult.public_id + ".jpg"
+							//	The remaining variables will be 
+							//	created using their default valuse as predefined in 
+							//	the album schema
+						});
 
-					//	Save the changes
-					doc.save(function(err, doc){
-						if(!err){
-							console.log('Album SAVED!');
-							res.status(200).json({success: true, data: doc});
-						}else{
-							console.log('ERROR saving album');
-							console.log(err);
-							res.status(200).json({success: false});
-						}
-					})
-				
-				//	Error while getting an album by id	
-				}else{
-					console.log('Error : Could not find the desired album');
-					console.log(err);
-					res.status(200).json({success: false});
-				}
+						//	Save the changes
+						doc.save(function(err, doc){
+							if(!err){
+								console.log('Album SAVED!');
+								res.status(200).json({success: true, data: doc});
+							}else{
+								console.log('ERROR saving album');
+								console.log(err);
+								res.status(200).json({success: false});
+							}
+						})
+					
+					//	Error while getting an album by id	
+					}else{
+						console.error('ERROR : Could not find the desired album');
+						console.error(err);
+						res.status(200).json({success: false});
+					}
 
-			});
+				});
+			//	Cloudinary upload error
+			}else{
+				console.error('ERROR: Cloudinary upload');
+				console.error(cloudinaryResult.error);
+			}
 		});
 
 }
