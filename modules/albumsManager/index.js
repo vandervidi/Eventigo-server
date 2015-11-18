@@ -20,7 +20,10 @@ Creates a new album for a user
 //	CALLBACK HELL !!! REWRITE THIS METHOD - divide callbacks to individual functions
 //###################################################################################
 exports.createNewAlbum = function(req, res){
-	
+	console.log("#################################");
+	console.log(req.body.albumData.date);
+	console.log(new Date(req.body.albumData.date));
+
 	var album = new Album({
 		shortId: shortid.generate(),
 		creator: req.body.creator,
@@ -96,6 +99,7 @@ exports.getAlbumById = function(req, res){
 	
 /**
 Upload a base64 photo string to Cloudinary and save the returned photo URL in the album's document
+
 @param {object} - http request object
 @param {object} - http response object
 */
