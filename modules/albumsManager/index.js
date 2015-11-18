@@ -25,7 +25,7 @@ exports.createNewAlbum = function(req, res){
 		shortId: shortid.generate(),
 		creator: req.body.creator,
 		name: req.body.albumData.name,
-		date: req.body.albumData.date,
+		date: new Date(req.body.albumData.date),
 		location: req.body.albumData.location
 	});
 
