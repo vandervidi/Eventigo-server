@@ -11,7 +11,7 @@ var albumSchema = new Schema({
 
 	activeStatus: {type: Boolean, default: true},
 
-	creationDate: {type: Date},
+	creationDate: {type: Date, default: Date.now},
 
 	creator: {type: String, ref:'userM' , required :true},  // This is the owner's user ID
 
