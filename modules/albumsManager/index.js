@@ -85,7 +85,7 @@ Retrieves an album by id
 exports.getAlbumById = function(req, res){
 
 	console.log("Getting album by id");
-	Album.findById(req.body.id).exec(function(err, doc){
+	Album.findById(req.body.id).populate('creator photos.owner photos.likes photos.comments participants').exec(function(err, doc){
 		if(!err){
 			res.status(200).json({success: true, data: doc});
 		}else{

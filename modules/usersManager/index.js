@@ -26,7 +26,7 @@ exports.register = function(req, res){
 		new: true
 	};
 
-	User.findOneAndUpdate(query, update, options).populate('creator photos.owner photos.likes photos.comments participants').exec(function(err ,doc){
+	User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
 		if(!err){
 			console.log('REGISTERED!: ' , JSON.stringify(doc));
 			res.status(200).json({'success': true, 'doc': doc});
