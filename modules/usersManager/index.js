@@ -49,7 +49,7 @@ Retrieves list of user albums
 exports.getUserAlbums = function(req, res){
 	console.log("GETTING USER ALBUMS");
 	console.log('UserID: ' + req.body.userId );
-	 User.findById(req.body.userId).populate('albums').exec(function(err, userDoc){
+	 User.findById(req.body.userId).populate('albums photos.owner').exec(function(err, userDoc){
 		console.log(userDoc);
 		if(!err){
 			console.log(userDoc);userDoc.album
