@@ -85,7 +85,7 @@ Retrieves an album by id
 exports.getAlbumById = function(req, res){
 
 	console.log("Getting album by id");
-	Album.findById(req.body.id).populate('creator photos.owner photos.likes photos.comments participants').exec(function(err, doc){
+	Album.findById(req.body.id).populate('creator photos.owner').exec(function(err, doc){
 		if(!err){
 			res.status(200).json({success: true, data: doc});
 		}else{
@@ -154,4 +154,49 @@ exports.uploadPhotoToAlbum = function(req, res){
 		});
 
 }
+
+
+/**
+This function toggles a user like/unlike on a single photo in an album
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.toggleLike = function(req, res){
+
+	//	Add the user into the likes array. If it already exist there - remove it
+	var promise = Album.findOneAndUpdate({'_id': req.body.albumId, 'photos._id': req.body.photoId}, {$addToSet : { 'photos.$.likes' : req.body.userId}}).exec();
+	promise.then(function(albumDoc){
+		//	The document returned is the one BEFORE pushing the user into the likes array.
+		//	Check here if the user id is in the likes array.
+		//	case 1: It is in the likes array. ==> remove it  (toggle)
+			var photosLen = albumDoc.photos.length;
+			for(var i=0; i<photosLen; i++){
+				if(albumDoc.photos[i]._id == req.body.photoId){
+					console.log("Found matching photo")
+					var indexToRemove = albumDoc.photos[i].likes.indexOf(req.body.userId);
+					if (indexToRemove > -1) {
+						console.log('Removing item');
+					    albumDoc.photos[i].likes.splice(indexToRemove, 1);
+					    return albumDoc.save();
+					}
+				}
+			}
+		// 	case 2: The user id is not in the likes array
+		//	DO NOTHING ABOUT IT. USER ID WAS INSERTED BY THE QUERY
+	})
+
+	.then(function(albumDoc){
+		console.log('Liked!');
+		res.status(200).json({success: true, data: albumDoc});
+	})
+
+	//	Handle promise erorrs
+	.catch(function(err){
+		console.log('ERROR: Toggle like function');
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}	
+
 

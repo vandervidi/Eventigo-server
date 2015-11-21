@@ -49,3 +49,7 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
  //	Join an existing album
  app.post('/joinAlbum', usersManager.joinAlbum);
+
+//	Like a photo
+ app.post('/likePhoto', albumsManager.toggleLike);
+
