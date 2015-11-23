@@ -89,6 +89,11 @@ exports.getAlbumById = function(req, res){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
 			jsDoc.photos.sort(function(a, b){
+				console.log("################  SORTING");
+				console.log("a");
+				console.log(a);
+				console.log("b");
+				console.log(b);
 				return a._id - b._id;	//	
 			});
 
