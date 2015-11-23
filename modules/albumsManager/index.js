@@ -88,16 +88,7 @@ exports.getAlbumById = function(req, res){
 	Album.findById(req.body.id).populate('creator photos.owner').exec(function(err, doc){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
-			jsDoc.photos.sort(function(a, b){
-				console.log("################  SORTING");
-				console.log("a");
-				console.log(a);
-				console.log("b");
-				console.log(b);
-				a = new Date(a.dateModified);
-			    b = new Date(b.dateModified);
-			    return a>b ? -1 : a<b ? 1 : 0;
-			});
+			jsDoc.photos.reverse();
 
 			res.status(200).json({success: true, data: jsDoc});
 		}else{
