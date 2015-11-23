@@ -94,7 +94,9 @@ exports.getAlbumById = function(req, res){
 				console.log(a);
 				console.log("b");
 				console.log(b);
-				return new Date(b.date) - new Date(a.date);
+				a = new Date(a.dateModified);
+			    b = new Date(b.dateModified);
+			    return a>b ? -1 : a<b ? 1 : 0;
 			});
 
 			res.status(200).json({success: true, data: jsDoc});
