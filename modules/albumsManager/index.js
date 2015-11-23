@@ -89,7 +89,7 @@ exports.getAlbumById = function(req, res){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
 			jsDoc.photos.sort(function(a, b){
-				return a-b;	//	We reverse sort it so the latest photos will be at the begining of the array
+				return a._id - b._id;	//	
 			});
 
 			res.status(200).json({success: true, data: jsDoc});
