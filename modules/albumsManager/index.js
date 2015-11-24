@@ -196,6 +196,7 @@ exports.toggleLike = function(req, res){
 }	
 
 
+
 /**
 This function sets a custom cover photo to an album
 
@@ -222,4 +223,32 @@ exports.setCover = function(req, res){
 		console.log(err);
 		res.status(200).json({success: false});
 	});
+}
+
+
+
+/**
+This function deletes a photo from an album
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.deletePhoto = function(req, res){
+	console.log("[LOG] Deleteing a photo");
+	var promise = Album.findById(req.body.albumId).exec();
+	promise.then(function(albumDoc){
+		albumDoc.photos.pull({'_id' : req.body.photoId});
+		return albumDoc.save();
+	})
+	//	Saving changes
+	.then(function(savedAlbumDoc){
+		console.log("[LOG] successfully deleted a photo from an album");
+		res.status(200).json({success: true});
+	})
+	//	Error handler
+	.catch(function(err){
+		console.log('[ERROR] Could not delete photo from album');
+		console.log(err);
+		res.status(200).json({success: false});
+	})
 }
