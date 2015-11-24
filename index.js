@@ -53,3 +53,5 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 //	Like a photo
  app.post('/likePhoto', albumsManager.toggleLike);
 
+//	Set a cover photo to album
+ app.post('/setCover', albumsManager.setCover);

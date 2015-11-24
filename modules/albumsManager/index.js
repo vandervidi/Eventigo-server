@@ -20,10 +20,8 @@ Creates a new album for a user
 //	CALLBACK HELL !!! REWRITE THIS METHOD - divide callbacks to individual functions
 //###################################################################################
 exports.createNewAlbum = function(req, res){
-	console.log("#################################");
-	console.log(req.body.albumData.date);
-	console.log(new Date(req.body.albumData.date));
 
+	//	Creating a new album schema object
 	var album = new Album({
 		shortId: shortid.generate(),
 		creator: req.body.creator,
@@ -32,42 +30,36 @@ exports.createNewAlbum = function(req, res){
 		location: req.body.albumData.location
 	});
 
+	//	Saving the new album
 	album.save(function(err, albumDoc){
 		if(!err){
-			console.log("successfully saved new album in albums schema!");
-
-					
-					User.findOne().where({'_id': req.body.creator}).exec(function(err, userDoc){
-							if(!err){
-								//	Add the new album ID to the user
-								console.log(userDoc);
-								console.log('userDoc.albums: ' + userDoc.albums );
-								console.log('albumDoc._id: ' + albumDoc._id);
-								userDoc.albums.unshift(albumDoc._id);
-
-							
-
-									//	Save changes
-									userDoc.save(function(err, doc){
-										if(!err){
-											res.status(200).json({success: true});
-										}else{
-											console.log(err);
-											res.status(200).json({success: false});
-										}
-									});
-
-
-
-							}else{
-								console.log('Could not find a user by the requested id');
-								res.status(200).json({success: false});
-							}
-					});
+			console.log("[LOG] successfully saved new album in albums schema!");
+		
+			User.findOne().where({'_id': req.body.creator}).exec(function(err, userDoc){
+					if(!err){
+						//	Add the new album ID to the user
+						userDoc.albums.unshift(albumDoc._id);
+				
+							//	Save changes
+							userDoc.save(function(err, doc){
+								if(!err){
+									console.log("[LOG] seccessfully added the new album to the user document");
+									res.status(200).json({success: true});
+								}else{
+									console.log("[ERROR] Failed to save the new album to the user document");
+									console.log(err);
+									res.status(200).json({success: false});
+								}
+							});
+					}else{
+						console.log('[ERROR] Could not find a user by the requested id');
+						res.status(200).json({success: false});
+					}
+			});
 
 
 		}else{
-			console.log("There was an error while saving new album object to mongo");
+			console.log("[ERROR] There was an error while saving new album object to mongo");
 			console.log(err);
 			res.status(200).json({success: false});
 		}
@@ -84,14 +76,15 @@ Retrieves an album by id
 */
 exports.getAlbumById = function(req, res){
 
-	console.log("Getting album by id");
+	console.log("[LOG] Getting album by id...");
 	Album.findById(req.body.id).populate('creator photos.owner').exec(function(err, doc){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
 			jsDoc.photos.reverse();
-
+			console.log("[LOG] Album found by id " + req.body.id)
 			res.status(200).json({success: true, data: jsDoc});
 		}else{
+			console.log("[ERROR] Could not get album by id " + req.body.id);
 			console.log(err);
 			res.status(200).json({success: false});
 		}
@@ -108,18 +101,18 @@ Upload a base64 photo string to Cloudinary and save the returned photo URL in th
 */
 exports.uploadPhotoToAlbum = function(req, res){
 	
-	console.log('uploading a picture to cloudinary');
+	console.log('[LOG] uploading a picture to cloudinary...');
 	//	Uploading the photo to Cloudinary
 	cloudinary.uploader.upload('data:image/gif;base64,' + req.body.photoUri, 
 		//	success callback
 		function(cloudinaryResult) {
 			if(!cloudinaryResult.error){	
-				console.log("Upladed successfully a picture to cloudinary!");
+				console.log("[LOG] Upladed successfully a picture to cloudinary!");
 
 				//	Save the photo to the relevant album
 				Album.findById(req.body.albumId).exec(function(err, doc){
 					if (!err){
-						console.log('Album FOUND!, Modifying...');
+						console.log('[LOG] Album FOUND!, Modifying...');
 						//	Edit the found document
 						doc.photos.push({
 							owner: req.body.photoOwner,
@@ -132,10 +125,10 @@ exports.uploadPhotoToAlbum = function(req, res){
 						//	Save the changes
 						doc.save(function(err, doc){
 							if(!err){
-								console.log('Album SAVED!');
+								console.log('[LOG] Album SAVED!');
 								res.status(200).json({success: true, data: doc});
 							}else{
-								console.log('ERROR saving album');
+								console.log('[ERROR] saving album');
 								console.log(err);
 								res.status(200).json({success: false});
 							}
@@ -143,7 +136,7 @@ exports.uploadPhotoToAlbum = function(req, res){
 					
 					//	Error while getting an album by id	
 					}else{
-						console.error('ERROR : Could not find the desired album');
+						console.error('[ERROR] Could not find the desired album');
 						console.error(err);
 						res.status(200).json({success: false});
 					}
@@ -151,7 +144,7 @@ exports.uploadPhotoToAlbum = function(req, res){
 				});
 			//	Cloudinary upload error
 			}else{
-				console.error('ERROR: Cloudinary upload');
+				console.error('[ERROR] Cloudinary upload');
 				console.error(cloudinaryResult.error);
 			}
 		});
@@ -176,10 +169,10 @@ exports.toggleLike = function(req, res){
 			var photosLen = albumDoc.photos.length;
 			for(var i=0; i<photosLen; i++){
 				if(albumDoc.photos[i]._id == req.body.photoId){
-					console.log("Found matching photo")
+					console.log("[LOG] Found matching photo")
 					var indexToRemove = albumDoc.photos[i].likes.indexOf(req.body.userId);
 					if (indexToRemove > -1) {
-						console.log('Removing item');
+						console.log('[LOG] Removing item');
 					    albumDoc.photos[i].likes.splice(indexToRemove, 1);
 					    return albumDoc.save();
 					}
@@ -190,16 +183,43 @@ exports.toggleLike = function(req, res){
 	})
 
 	.then(function(albumDoc){
-		console.log('Liked!');
+		console.log('[LOG] Liked!');
 		res.status(200).json({success: true, data: albumDoc});
 	})
 
 	//	Handle promise erorrs
 	.catch(function(err){
-		console.log('ERROR: Toggle like function');
+		console.log('[ERROR] Toggle like function');
 		console.log(err);
 		res.status(200).json({success: false});
 	});
 }	
 
 
+/**
+This function sets a custom cover photo to an album
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.setCover = function(req, res){
+	console.log(req.body.url);
+	var promise = Album.findOneAndUpdate({'_id': req.body.albumId}, {'coverPhoto': req.body.photoUrl}, {new: true}).exec();
+	promise.then(function(albumDoc){
+		console.log(albumDoc);
+		albumDoc.coverPhoto = req.body.url;
+		return albumDoc.save();
+	})
+
+	.then(function(savedDoc){
+		console.log(savedDoc);
+		console.log("[LOG] successfully set album cover photo");
+		res.status(200).json({success: true});
+	})
+
+	.catch(function(err){
+		console.log('[ERROR] Could not set album cover photo');
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}
