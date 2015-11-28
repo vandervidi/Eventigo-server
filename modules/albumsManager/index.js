@@ -78,15 +78,15 @@ Retrieves an album by id
 */
 exports.getAlbumById = function(req, res){
 
-	console.log("[LOG] Getting album by id: ", req.body.id);
-	Album.findById(req.body.id).populate('creator photos.owner').exec(function(err, doc){
+	console.log("[LOG] Getting album by id: ", req.body.albumId);
+	Album.findById(req.body.albumId).populate('creator photos.owner').exec(function(err, doc){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
 			jsDoc.photos.reverse();
-			console.log("[LOG] Album found by id " + req.body.id)
+			console.log("[LOG] Album found by id " + req.body.albumId)
 			res.status(200).json({success: true, data: jsDoc});
 		}else{
-			console.log("[ERROR] Could not get album by id " + req.body.id);
+			console.log("[ERROR] Could not get album by id " + req.body.albumId);
 			console.log(err);
 			res.status(200).json({success: false});
 		}
@@ -284,12 +284,12 @@ exports.getAlbumGuests = function(req, res){
 	var promise = Album.findById(req.body.albumId).populate('guests').exec();
 
 	promise.then(function(albumDoc){
-		console.log("[LOG] successfully found album. returning guesta list");
+		console.log("[LOG] successfully found album. returning guests list");
 		res.status(200).json({success: true, guests: albumDoc.guests});
 	})
 
 	.catch(function(err){
-		console.log('[ERROR] Could not get album');
+		console.log('[ERROR] Could not get album Guests');
 		console.log(err);
 		res.status(200).json({success: false});
 	});
