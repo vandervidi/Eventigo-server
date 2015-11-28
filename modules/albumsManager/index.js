@@ -17,7 +17,7 @@ Creates a new album for a user
 @param {object} - http response object
 */
 //###################################################################################
-//	CALLBACK HELL !!! REWRITE THIS METHOD - divide callbacks to individual functions
+//	CALLBACK HELL !!! REWRITE THIS METHOD - use promises
 //###################################################################################
 exports.createNewAlbum = function(req, res){
 
@@ -29,6 +29,8 @@ exports.createNewAlbum = function(req, res){
 		creationDate: req.body.albumData.date,
 		location: req.body.albumData.location
 	});
+
+	album.guests.push(req.body.creator);
 
 	//	Saving the new album
 	album.save(function(err, albumDoc){
@@ -99,6 +101,9 @@ Upload a base64 photo string to Cloudinary and save the returned photo URL in th
 @param {object} - http request object
 @param {object} - http response object
 */
+//###################################################################################
+//	CALLBACK HELL !!! REWRITE THIS METHOD - use promises
+//###################################################################################
 exports.uploadPhotoToAlbum = function(req, res){
 	
 	console.log('[LOG] uploading a picture to cloudinary...');
@@ -240,15 +245,95 @@ exports.deletePhoto = function(req, res){
 		albumDoc.photos.pull({'_id' : req.body.photoId});
 		return albumDoc.save();
 	})
+
 	//	Saving changes
 	.then(function(savedAlbumDoc){
 		console.log("[LOG] successfully deleted a photo from an album");
 		res.status(200).json({success: true});
 	})
+
 	//	Error handler
 	.catch(function(err){
 		console.log('[ERROR] Could not delete photo from album');
 		console.log(err);
 		res.status(200).json({success: false});
 	})
+}
+
+
+
+/**
+This function returns an album's feed
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.getPhotoFeed = function(req, res){
+
+}
+
+
+
+/**
+This function returns an album's guests list
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.getAlbumGuests = function(req, res){
+	var promise = Album.findById(req.body.albumId).populate('guests').exec();
+
+	promise.then(function(albumDoc){
+		console.log("[LOG] successfully found album. returning guesta list");
+		res.status(200).json({success: true, guests: albumDoc.guests});
+	})
+
+	.catch(function(err){
+		console.log('[ERROR] Could not get album');
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}
+
+
+
+/**
+This function returns an album's likes list
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.getPhotoLikes = function(req, res){
+	console.log('PhotoID: ', req.body.photoId);
+	var promise = Album.findById(req.body.albumId).populate('photos.likes').exec();
+
+	promise.then(function(albumDoc){
+		console.log("[LOG] successfully found album with id: ", req.body.albumId);
+
+		var photosLen = albumDoc.photos.length;
+		for(var i=0; i<photosLen; i++){
+			if(albumDoc.photos[i]._id == req.body.photoId){
+				console.log("[LOG] successfully returning likes list from album: ", req.body.albumId);
+				res.status(200).json({success: true, likes: albumDoc.photos[i].likes });
+			}
+		}
+	})
+
+	.catch(function(err){
+		console.log('[ERROR] Could not get photo likes');
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}
+
+
+
+/**
+This function returns an album's comments
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.getPhotoComments = function(req, res){
+
 }

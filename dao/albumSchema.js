@@ -38,7 +38,7 @@ var albumSchema = new Schema({
 	}],
 
 
-	participants: [{ type: String, ref:'userM'}] 	// Array of users ID's that 
+	guests: [{ type: String, ref:'userM'}] 	// Array of users ID's that 
 	
 }, {collection: 'albums'});
 
