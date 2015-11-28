@@ -78,7 +78,7 @@ Retrieves an album by id
 */
 exports.getAlbumById = function(req, res){
 
-	console.log("[LOG] Getting album by id...");
+	console.log("[LOG] Getting album by id: ", req.body.id);
 	Album.findById(req.body.id).populate('creator photos.owner').exec(function(err, doc){
 		if(!err){
 			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
