@@ -103,7 +103,7 @@ exports.uploadPhotoToAlbum = function(req, res){
 				console.log("[LOG] Upladed successfully a picture to cloudinary!");
 
 				//	Save the photo to the relevant album
-				var peomise = Album.findById(req.body.albumId).exec();
+				var promise = Album.findById(req.body.albumId).exec();
 				promise.then(function(albumDoc){
 					console.log('[LOG] Album FOUND!, Pushing new photo to the photos array...');
 					//	Push the new photo to album's photos array
