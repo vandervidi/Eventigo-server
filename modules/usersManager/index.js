@@ -130,6 +130,7 @@ Handels a use-case where a user leaves an album but does not delete it.
 @param {object} - http response object
 */
 exports.leaveAlbum = function(req, res){
+	console.log('[LOG] Leaving an album');
 	var promise = User.findById(req.body.userId).exec();
 	promise.then(function(userDoc){
 		var indexToRemove = userDoc.albums.indexOf(req.body.albumId);
@@ -148,6 +149,40 @@ exports.leaveAlbum = function(req, res){
 
 	//	Error handler
 	.catch(function(err){
+		console.log('[ERROR] Could not leave album')
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}
+
+
+
+/**
+Handels a use-case where a photo creator DELETES an album. 
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.deleteAlbum = function(req, res){
+	console.log(req.body);
+	console.log('[LOG] Deleting an album');
+
+	var promise = User.update({'albums': req.body.albumId}, {$pull: {'albums' : req.body.albumId }} , { multi: true }).exec();
+	promise.then(function(userDocs){
+		console.log('[LOG] Deleted this album from all users');
+		return Album.findById(req.body.albumId);
+	})
+
+	.then(function(albumDoc){
+		return albumDoc.remove();
+	})
+
+	.then(function(){
+		res.status(200).json({success: true});
+	})
+
+	.catch(function(err){
+		console.log('[ERROR] Could not delete this album from all users');
 		console.log(err);
 		res.status(200).json({success: false});
 	});

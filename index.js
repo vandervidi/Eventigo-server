@@ -59,8 +59,11 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
  //	Set a cover photo to album
  app.post('/deletePhoto', albumsManager.deletePhoto);
 
+//	User leaves an album
+ app.post('/leaveAlbum', usersManager.leaveAlbum);
 
- app.post('/leaveALbum', usersManager.leaveAlbum);
+// 	User ldeletes an album
+ app.post('/deleteAlbum', usersManager.deleteAlbum);
 
 
  app.post('/getPhotoFeed', albumsManager.getPhotoFeed);
