@@ -20,7 +20,7 @@ Creates a new album for a user
 //	CALLBACK HELL !!! REWRITE THIS METHOD - use promises
 //###################################################################################
 exports.createNewAlbum = function(req, res){
-	var albumDoc;
+	var albumDocRef;
 	//	Creating a new album schema object
 	var album = new Album({
 		shortId: shortid.generate(),
@@ -37,18 +37,20 @@ exports.createNewAlbum = function(req, res){
 		//	Save success callback - new album is saved
 		promise.then(function(albumDoc){
 			console.log("[LOG] successfully saved new album in albums schema!");
-			albumDoc = albumDoc;
+			albumDocRef = albumDoc;
+			console.log(albumDocRef);
 			return User.findOne().where({'_id': req.body.creator}).exec();
 		})
 
 		//	findOne() success callback - found a user
 		.then(function(userDoc){
+			console.log(albumDocRef);
 			userDoc.albums.unshift(albumDoc._id);
 			return userDoc.save();
 		})
 
 		.then(function(savedUserDoc){
-			console.log("[LOG] seccessfully added the new album to the user document");
+			console.log("[LOG] successfully added the new album to the user document");
 			res.status(200).json({success: true});
 		})
 
