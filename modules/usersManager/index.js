@@ -167,22 +167,30 @@ exports.deleteAlbum = function(req, res){
 	console.log(req.body);
 	console.log('[LOG] Deleting an album');
 
+	//	Pulling album ID from albums array in all matching user documents
 	var promise = User.update({'albums': req.body.albumId}, {$pull: {'albums' : req.body.albumId }} , { multi: true }).exec();
+	
+	//	update() success callback
 	promise.then(function(userDocs){
-		console.log('[LOG] Deleted this album from all users');
+		console.log('[LOG] Deleted this album from all users documents');
 		return Album.findById(req.body.albumId);
 	})
 
+	//	findById() success callback
 	.then(function(albumDoc){
+		console.log('[LOG] Trying to remove an album....');
 		return albumDoc.remove();
 	})
 
+	//	Remove() success callback
 	.then(function(){
+		console.log('[LOG] Album removed from albums collection');
 		res.status(200).json({success: true});
 	})
 
+	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Could not delete this album from all users');
+		console.log('[ERROR] Could not delete this album from all users documents');
 		console.log(err);
 		res.status(200).json({success: false});
 	});
