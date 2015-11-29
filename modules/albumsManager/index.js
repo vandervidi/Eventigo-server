@@ -45,7 +45,7 @@ exports.createNewAlbum = function(req, res){
 		//	findOne() success callback - found a user
 		.then(function(userDoc){
 			console.log(albumDocRef);
-			userDoc.albums.unshift(albumDoc._id);
+			userDoc.albums.unshift(albumDocRef._id);
 			return userDoc.save();
 		})
 
