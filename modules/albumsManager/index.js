@@ -16,9 +16,6 @@ Creates a new album for a user
 @param {object} - http request object
 @param {object} - http response object
 */
-//###################################################################################
-//	CALLBACK HELL !!! REWRITE THIS METHOD - use promises
-//###################################################################################
 exports.createNewAlbum = function(req, res){
 	var albumDocRef;
 	//	Creating a new album schema object
@@ -38,13 +35,11 @@ exports.createNewAlbum = function(req, res){
 		promise.then(function(albumDoc){
 			console.log("[LOG] successfully saved new album in albums schema!");
 			albumDocRef = albumDoc;
-			console.log(albumDocRef);
 			return User.findOne().where({'_id': req.body.creator}).exec();
 		})
 
 		//	findOne() success callback - found a user
 		.then(function(userDoc){
-			console.log(albumDocRef);
 			userDoc.albums.unshift(albumDocRef._id);
 			return userDoc.save();
 		})
@@ -108,44 +103,41 @@ exports.uploadPhotoToAlbum = function(req, res){
 				console.log("[LOG] Upladed successfully a picture to cloudinary!");
 
 				//	Save the photo to the relevant album
-				Album.findById(req.body.albumId).exec(function(err, doc){
-					if (!err){
-						console.log('[LOG] Album FOUND!, Modifying...');
-						//	Edit the found document
-						doc.photos.push({
+				var peomise = Album.findById(req.body.albumId).exec();
+				promise.then(function(albumDoc){
+					console.log('[LOG] Album FOUND!, Pushing new photo to the photos array...');
+					//	Push the new photo to album's photos array
+					albumDoc.photos.push({
 							owner: req.body.photoOwner,
 							url: cloudinaryResult.public_id + ".jpg"
 							//	The remaining variables will be 
 							//	created using their default valuse as predefined in 
 							//	the album schema
-						});
+					});
+					return albumDoc.save();
+				})
 
-						//	Save the changes
-						doc.save(function(err, doc){
-							if(!err){
-								console.log('[LOG] Album SAVED!');
-								res.status(200).json({success: true, data: doc});
-							}else{
-								console.log('[ERROR] saving album');
-								console.log(err);
-								res.status(200).json({success: false});
-							}
-						})
-					
-					//	Error while getting an album by id	
-					}else{
-						console.error('[ERROR] Could not find the desired album');
-						console.error(err);
-						res.status(200).json({success: false});
-					}
-
+				.then(function(savedAlbumDoc){
+					console.log('[LOG] Album changes are SAVED!');
+					res.status(200).json({success: true, data: savedAlbumDoc});
+				})
+				
+				.catch(function(err){
+					console.error('[ERROR] Could not upload photo to album');
+					console.error(cloudinaryResult.error);
+					res.status(200).json({success: false});
 				});
+					
+
 			//	Cloudinary upload error
 			}else{
-				console.error('[ERROR] Cloudinary upload');
+				console.error('[ERROR] Cloudinary upload failure');
 				console.error(cloudinaryResult.error);
+				res.status(200).json({success: false});
 			}
-		});
+		
+		}
+	);
 
 }
 
