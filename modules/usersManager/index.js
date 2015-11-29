@@ -120,3 +120,35 @@ exports.joinAlbum = function(req, res){
 	});
 	
 }
+
+
+
+/**
+Handels a use-case where a user leaves an album but does not delete it. 
+
+@param {object} - http request object
+@param {object} - http response object
+*/
+exports.leaveAlbum = function(req, res){
+	var promise = User.findById(req.body.userId).exec();
+	promise.then(function(userDoc){
+		var indexToRemove = userDoc.albums.indexOf(req.body.albumId);
+		if(indexToRemove > -1){
+			console.log('[LOG] Removing album from user albums list');
+		    userDoc.albums.splice(indexToRemove, 1);
+		    return userDoc.save();
+		}
+		throw new "[Error] There is no such album ID in user's albums list"
+	})
+
+	.then(function(savedUserDoc){
+		console.log('[LOG] Album ID is removed. ');
+		res.status(200).json({success: true});
+	})
+
+	//	Error handler
+	.catch(function(err){
+		console.log(err);
+		res.status(200).json({success: false});
+	});
+}

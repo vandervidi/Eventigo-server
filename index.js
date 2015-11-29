@@ -60,6 +60,9 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
  app.post('/deletePhoto', albumsManager.deletePhoto);
 
 
+ app.post('/leaveALbum', usersManager.leaveAlbum);
+
+
  app.post('/getPhotoFeed', albumsManager.getPhotoFeed);
 
 

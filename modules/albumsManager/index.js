@@ -162,7 +162,7 @@ exports.toggleLike = function(req, res){
 					console.log("[LOG] Found matching photo")
 					var indexToRemove = albumDoc.photos[i].likes.indexOf(req.body.userId);
 					if (indexToRemove > -1) {
-						console.log('[LOG] Removing item');
+						console.log('[LOG] Removing like');
 					    albumDoc.photos[i].likes.splice(indexToRemove, 1);
 					    return albumDoc.save();
 					}
