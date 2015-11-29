@@ -20,7 +20,7 @@ Creates a new album for a user
 //	CALLBACK HELL !!! REWRITE THIS METHOD - use promises
 //###################################################################################
 exports.createNewAlbum = function(req, res){
-
+	var albumDoc;
 	//	Creating a new album schema object
 	var album = new Album({
 		shortId: shortid.generate(),
@@ -33,39 +33,30 @@ exports.createNewAlbum = function(req, res){
 	album.guests.push(req.body.creator);
 
 	//	Saving the new album
-	album.save(function(err, albumDoc){
-		if(!err){
+	var promise = album.save();
+		//	Save success callback - new album is saved
+		promise.then(function(albumDoc){
 			console.log("[LOG] successfully saved new album in albums schema!");
-		
-			User.findOne().where({'_id': req.body.creator}).exec(function(err, userDoc){
-					if(!err){
-						//	Add the new album ID to the user
-						userDoc.albums.unshift(albumDoc._id);
-				
-							//	Save changes
-							userDoc.save(function(err, doc){
-								if(!err){
-									console.log("[LOG] seccessfully added the new album to the user document");
-									res.status(200).json({success: true});
-								}else{
-									console.log("[ERROR] Failed to save the new album to the user document");
-									console.log(err);
-									res.status(200).json({success: false});
-								}
-							});
-					}else{
-						console.log('[ERROR] Could not find a user by the requested id');
-						res.status(200).json({success: false});
-					}
-			});
+			albumDoc = albumDoc;
+			return User.findOne().where({'_id': req.body.creator}).exec();
+		})
 
+		//	findOne() success callback - found a user
+		.then(function(userDoc){
+			userDoc.albums.unshift(albumDoc._id);
+			return userDoc.save();
+		})
 
-		}else{
-			console.log("[ERROR] There was an error while saving new album object to mongo");
+		.then(function(savedUserDoc){
+			console.log("[LOG] seccessfully added the new album to the user document");
+			res.status(200).json({success: true});
+		})
+
+		.catch(function(err){
+			console.log("[ERROR] Failed to save the new album to the user document ");
 			console.log(err);
 			res.status(200).json({success: false});
-		}
-	});
+		});
 }
 
 
