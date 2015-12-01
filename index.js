@@ -33,46 +33,52 @@ app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
 
 //	Router
 //	Register a new user - first facebook login
- app.post('/registerUser', usersManager.register);
+app.post('/registerUser', usersManager.register);
 
 //	Creating a new photo album
- app.post('/createNewAlbum', albumsManager.createNewAlbum);
+app.post('/createNewAlbum', albumsManager.createNewAlbum);
 
- //	get list of user's albums
- app.post('/getUserAlbums', usersManager.getUserAlbums);
+//	get list of user's albums
+app.post('/getUserAlbums', usersManager.getUserAlbums);
 
- // Get album by id
- app.post('/getAlbumById', albumsManager.getAlbumById);
+// Get album by id
+app.post('/getAlbumById', albumsManager.getAlbumById);
 
- //	Upload a photo to an album
- app.post('/uploadPhotoToAlbum', albumsManager.uploadPhotoToAlbum);
+//	Upload a photo to an album
+app.post('/uploadPhotoToAlbum', albumsManager.uploadPhotoToAlbum);
 
- //	Join an existing album
- app.post('/joinAlbum', usersManager.joinAlbum);
+//	Join an existing album
+app.post('/joinAlbum', usersManager.joinAlbum);
 
 //	Like a photo
- app.post('/likePhoto', albumsManager.toggleLike);
+app.post('/likePhoto', albumsManager.toggleLike);
 
 //	Set a cover photo to album
- app.post('/setCover', albumsManager.setCover);
+app.post('/setCover', albumsManager.setCover);
 
- //	Set a cover photo to album
- app.post('/deletePhoto', albumsManager.deletePhoto);
+//	Set a cover photo to album
+app.post('/deletePhoto', albumsManager.deletePhoto);
 
 //	User leaves an album
- app.post('/leaveAlbum', usersManager.leaveAlbum);
+app.post('/leaveAlbum', usersManager.leaveAlbum);
 
 // 	User ldeletes an album
- app.post('/deleteAlbum', usersManager.deleteAlbum);
+app.post('/deleteAlbum', usersManager.deleteAlbum);
 
+//	Get photo feed messages
+app.post('/getPhotoFeed', albumsManager.getPhotoFeed);
 
- app.post('/getPhotoFeed', albumsManager.getPhotoFeed);
+//	Get photo comments
+app.post('/getPhotoComments', albumsManager.getPhotoComments);
 
+// Get album guest list
+app.post('/getAlbumGuests', albumsManager.getAlbumGuests);
 
- app.post('/getPhotoComments', albumsManager.getPhotoComments);
+//	Get photo likes list
+app.post('/getPhotoLikes', albumsManager.getPhotoLikes);
 
+//	Edit an album
+app.post('/editAlbum', albumsManager.editAlbum);
 
- app.post('/getAlbumGuests', albumsManager.getAlbumGuests);
-
-
- app.post('/getPhotoLikes', albumsManager.getPhotoLikes);
+//	Generate a new album short ID
+app.get('/generateNewAlbumCode' ,albumsManager.generateNewAlbumCode);

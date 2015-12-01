@@ -67,19 +67,19 @@ Retrieves an album by id
 exports.getAlbumById = function(req, res){
 
 	console.log("[LOG] Getting album by id: ", req.body.albumId);
-	Album.findById(req.body.albumId).populate('creator photos.owner').exec(function(err, doc){
-		if(!err){
-			var jsDoc = doc.toObject();	//	converting the document to a javascript object in order to manipulate it.
+	var promise = Album.findById(req.body.albumId).populate('creator photos.owner').exec();
+		promise.then(function(albumDoc){
+			var jsDoc = albumDoc.toObject();	//	converting the document to a javascript object in order to manipulate it.
 			jsDoc.photos.reverse();
 			console.log("[LOG] Album found by id " + req.body.albumId)
 			res.status(200).json({success: true, data: jsDoc});
-		}else{
+		})
+		
+		.catch(function(err){
 			console.log("[ERROR] Could not get album by id " + req.body.albumId);
 			console.log(err);
 			res.status(200).json({success: false});
-		}
-	});
-
+		});
 }
 
 	
@@ -321,4 +321,34 @@ This function returns an album's comments
 */
 exports.getPhotoComments = function(req, res){
 
+}
+
+
+exports.editAlbum = function(req, res){
+	var promise = Album.findById(req.body.albumId).exec();
+	promise.then(function(albumDoc){
+		albumDoc.name = req.body.name;
+		albumDoc.location = req.body.location;
+		albumDoc.creationDate = new Date(req.body.date);
+		albumDoc.coverPhoto = req.body.coverPhoto;
+		albumDoc.activeStatus = req.body.activeStatus;
+		albumDoc.shortId = req.body.shortId;
+		return albumDoc.save();
+	})
+
+	.then(function(savedAlbumDoc){
+		console.log('[LOG] Edited album. changes are saved');
+		res.status(200).json({success: true});
+	})
+
+	.catch(function(err){
+		console.log('[ERROR] Failure while an attempt to edit the album.');
+		console.error(err);
+		res.status(200).json({success: false});
+	});
+}
+
+
+exports.generateNewAlbumCode = function(req, res){
+	res.status(200).json({success: false, shortId: shortid.generate()});
 }
