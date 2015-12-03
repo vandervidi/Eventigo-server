@@ -12,7 +12,9 @@ A function that handles a new user registration
 exports.register = function(req, res){
 	console.log('[LOG] ATTEMPT to register a user with facebook id: ' + req.body.userInfo.id);
 
-	var query = {'_id': req.body.userInfo.id};
+	var query = {
+		'_id': req.body.userInfo.id
+	};
 
 	var update = {
 		'_id': req.body.userInfo.id ,  					// Facebook userID
@@ -26,17 +28,17 @@ exports.register = function(req, res){
 		new: true
 	};
 
-	User.findOneAndUpdate(query, update, options).exec(function(err ,doc){
-		if(!err){
+	var promise = User.findOneAndUpdate(query, update, options).exec();
+		promise.then(function(userDoc){
 			console.log('[LOG] Registered new user');
-			res.status(200).json({'success': true, 'doc': doc});
-		}else{
-			console.log('[ERROR] : could not register the new user');
-			console.log(err);
-			res.status(200).json({'success': false});
-		}
+			res.status(200).json({'success': true, 'doc': userDoc});
+		});
 		
-	});
+		.catch(function(err){
+			console.error('[ERROR] : could not register the new user');
+			console.error(err);
+			res.status(200).json({'success': false});
+		});	
 };
 
 
@@ -70,7 +72,7 @@ We recieve a short code representing an album.
 */
 exports.joinAlbum = function(req, res){
 	console.log("[LOG] Joining an album");
-	var album;
+	var albumDocRef;
 	//	Find the album that the user wants to join
 	var promise = Album.findOne().where({'shortId': req.body.shortId}).exec();
 
@@ -91,15 +93,15 @@ exports.joinAlbum = function(req, res){
 	//	Find the user that wants to join the album
 	.then(function(albumDoc){
 		console.log('[LOG] added user id to album participants');
-		album = albumDoc;
+		albumDocRef = albumDoc;
 		return User.findById(req.body.userId).exec();
 	})
 
 	// Save the album ID in the user's albums array
 	.then(function(userDoc){
 		console.log('[LOG] User document found');
-		if(userDoc.albums.indexOf(album._id) === -1){
-			userDoc.albums.unshift(album._id);
+		if(userDoc.albums.indexOf(albumDocRef._id) === -1){
+			userDoc.albums.unshift(albumDocRef._id);
 		}
 		else{
 			throw "[ERROR] This user is already a participant in this album"
@@ -107,15 +109,16 @@ exports.joinAlbum = function(req, res){
 		return userDoc.save();
 	})
 
-	//	Return a response
+	//	Return a response when the changes to the user document are saved
 	.then(function(savedUserDoc){
 		console.log('[LOG] saved album id into user\'s albums array ');
-		res.status(200).json({success: true, albumId: album._id});
+		res.status(200).json({success: true, albumId: albumDocRef._id});
 	})
 
 	//	Error handler
 	.catch(function(err){
-		console.log(err);
+		console.error("[ERROR] user could not join the album");
+		console.error(err);
 		res.status(200).json({success: false});
 	});
 	
@@ -131,7 +134,9 @@ Handels a use-case where a user leaves an album but does not delete it.
 */
 exports.leaveAlbum = function(req, res){
 	console.log('[LOG] Leaving an album');
+
 	var promise = User.findById(req.body.userId).exec();
+
 	promise.then(function(userDoc){
 		var indexToRemove = userDoc.albums.indexOf(req.body.albumId);
 		if(indexToRemove > -1){
@@ -149,8 +154,8 @@ exports.leaveAlbum = function(req, res){
 
 	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Could not leave album')
-		console.log(err);
+		console.error('[ERROR] Could not leave album')
+		console.error(err);
 		res.status(200).json({success: false});
 	});
 }
@@ -164,7 +169,6 @@ Handels a use-case where a photo creator DELETES an album.
 @param {object} - http response object
 */
 exports.deleteAlbum = function(req, res){
-	console.log(req.body);
 	console.log('[LOG] Deleting an album');
 
 	//	Pulling album ID from albums array in all matching user documents
@@ -190,8 +194,8 @@ exports.deleteAlbum = function(req, res){
 
 	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Could not delete this album from all users documents');
-		console.log(err);
+		console.error('[ERROR] Could not delete this album from all users documents');
+		console.error(err);
 		res.status(200).json({success: false});
 	});
 }

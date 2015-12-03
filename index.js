@@ -1,4 +1,4 @@
-// ____   ____                  .___  developed by   .__    .___.__   
+// ____   ____                  .___  Developed by:  .__    .___.__   
 // \   \ /   /____    ____    __| _/______________  _|__| __| _/|__|  
 //  \   Y   /\__  \  /    \  / __ |/ __ \_  __ \  \/ /  |/ __ | |  |  
 //   \     /  / __ \|   |  \/ /_/ \  ___/|  | \/\   /|  / /_/ | |  |  
@@ -14,8 +14,10 @@ var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
 var cors = require('cors');
+
+//	Server port settings
 app.listen(process.env.PORT || 8080 , function(){
-  console.log('Snapify server is running ');
+  console.log('Eventigo server is running ');
 });
 
 //  Express.Use function means => Run this on ALL requests.(Middlewares) 
@@ -24,10 +26,10 @@ app.use( cors() );
 
 //  Setting up the Body-Parser library
 //	Manually setting data size limit to handle large picture sizes
-app.use(bodyParser.json({limit: '5mb'}));         //	to support JSON-encoded bodies
+app.use(bodyParser.json({limit: '10mb'}));         //	to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     //	to support URL-encoded bodies
   extended: true,
-  limit: '5mb'
+  limit: '10mb'
 })); 
 
 

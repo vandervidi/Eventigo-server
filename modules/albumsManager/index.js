@@ -18,6 +18,7 @@ Creates a new album for a user
 */
 exports.createNewAlbum = function(req, res){
 	var albumDocRef;
+
 	//	Creating a new album schema object
 	var album = new Album({
 		shortId: shortid.generate(),
@@ -29,31 +30,32 @@ exports.createNewAlbum = function(req, res){
 
 	album.guests.push(req.body.creator);
 
-	//	Saving the new album
+	//	Save the new album
 	var promise = album.save();
-		//	Save success callback - new album is saved
-		promise.then(function(albumDoc){
-			console.log("[LOG] successfully saved new album in albums schema!");
-			albumDocRef = albumDoc;
-			return User.findOne().where({'_id': req.body.creator}).exec();
-		})
+	//	Save success callback - new album is saved
+	promise.then(function(albumDoc){
+		console.log("[LOG] successfully saved new album in albums schema!");
+		albumDocRef = albumDoc;
+		return User.findOne().where({'_id': req.body.creator}).exec();
+	})
 
-		//	findOne() success callback - found a user
-		.then(function(userDoc){
-			userDoc.albums.unshift(albumDocRef._id);
-			return userDoc.save();
-		})
+	//	findOne() success callback - found a user
+	.then(function(userDoc){
+		userDoc.albums.unshift(albumDocRef._id);
+		return userDoc.save();
+	})
 
-		.then(function(savedUserDoc){
-			console.log("[LOG] successfully added the new album to the user document");
-			res.status(200).json({success: true});
-		})
+	.then(function(savedUserDoc){
+		console.log("[LOG] successfully added the new album to the user document");
+		res.status(200).json({success: true});
+	})
 
-		.catch(function(err){
-			console.log("[ERROR] Failed to save the new album to the user document ");
-			console.log(err);
-			res.status(200).json({success: false});
-		});
+	//	Error handler
+	.catch(function(err){
+		console.log("[ERROR] Failed to save the new album to the user document ");
+		console.log(err);
+		res.status(200).json({success: false});
+	});
 }
 
 
@@ -68,18 +70,22 @@ exports.getAlbumById = function(req, res){
 
 	console.log("[LOG] Getting album by id: ", req.body.albumId);
 	var promise = Album.findById(req.body.albumId).populate('creator photos.owner').exec();
-		promise.then(function(albumDoc){
-			var jsDoc = albumDoc.toObject();	//	converting the document to a javascript object in order to manipulate it.
-			jsDoc.photos.reverse();
-			console.log("[LOG] Album found by id " + req.body.albumId)
-			res.status(200).json({success: true, data: jsDoc});
-		})
-		
-		.catch(function(err){
-			console.log("[ERROR] Could not get album by id " + req.body.albumId);
-			console.log(err);
-			res.status(200).json({success: false});
-		});
+
+
+	promise.then(function(albumDoc){
+		console.log("[LOG] Album found by id: " + req.body.albumId);
+
+		var jsDoc = albumDoc.toObject();	//	converting the document to a javascript object in order to manipulate it.
+		jsDoc.photos.reverse();
+		res.status(200).json({success: true, data: jsDoc});
+	})
+	
+	//	Error handler
+	.catch(function(err){
+		console.log("[ERROR] Could not get album by id " + req.body.albumId);
+		console.log(err);
+		res.status(200).json({success: false});
+	});
 }
 
 	
@@ -177,7 +183,7 @@ exports.toggleLike = function(req, res){
 		res.status(200).json({success: true, data: albumDoc});
 	})
 
-	//	Handle promise erorrs
+	//	Error handler
 	.catch(function(err){
 		console.log('[ERROR] Toggle like function');
 		console.log(err);
@@ -204,10 +210,11 @@ exports.setCover = function(req, res){
 
 	.then(function(savedDoc){
 		console.log(savedDoc);
-		console.log("[LOG] successfully set album cover photo");
+		console.log("[LOG] Successfully set album cover photo");
 		res.status(200).json({success: true});
 	})
 
+	//	Error handler
 	.catch(function(err){
 		console.log('[ERROR] Could not set album cover photo');
 		console.log(err);
@@ -233,7 +240,7 @@ exports.deletePhoto = function(req, res){
 
 	//	Saving changes
 	.then(function(savedAlbumDoc){
-		console.log("[LOG] successfully deleted a photo from an album");
+		console.log("[LOG] Successfully deleted a photo from an album");
 		res.status(200).json({success: true});
 	})
 
@@ -266,6 +273,7 @@ This function returns an album's guests list
 @param {object} - http response object
 */
 exports.getAlbumGuests = function(req, res){
+	console.log("[LOG] Getting album guests list...");
 	var promise = Album.findById(req.body.albumId).populate('guests').exec();
 
 	promise.then(function(albumDoc){
@@ -273,9 +281,10 @@ exports.getAlbumGuests = function(req, res){
 		res.status(200).json({success: true, guests: albumDoc.guests});
 	})
 
+	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Could not get album Guests');
-		console.log(err);
+		console.error('[ERROR] Could not get album Guests');
+		console.error(err);
 		res.status(200).json({success: false});
 	});
 }
@@ -290,6 +299,7 @@ This function returns an album's likes list
 */
 exports.getPhotoLikes = function(req, res){
 	console.log('PhotoID: ', req.body.photoId);
+
 	var promise = Album.findById(req.body.albumId).populate('photos.likes').exec();
 
 	promise.then(function(albumDoc){
@@ -304,9 +314,10 @@ exports.getPhotoLikes = function(req, res){
 		}
 	})
 
+	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Could not get photo likes');
-		console.log(err);
+		console.error('[ERROR] Could not get photo likes');
+		console.error(err);
 		res.status(200).json({success: false});
 	});
 }
@@ -324,8 +335,18 @@ exports.getPhotoComments = function(req, res){
 }
 
 
+
+/**
+This function saves updates the user made to an album.
+
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.editAlbum = function(req, res){
+	console.log('[LOG] Editing album with id: ' + req.body.albumId);
 	var promise = Album.findById(req.body.albumId).exec();
+
+	//	Save changes to the found album document
 	promise.then(function(albumDoc){
 		albumDoc.name = req.body.name;
 		albumDoc.location = req.body.location;
@@ -341,14 +362,29 @@ exports.editAlbum = function(req, res){
 		res.status(200).json({success: true});
 	})
 
+	//	Error handler
 	.catch(function(err){
-		console.log('[ERROR] Failure while an attempt to edit the album.');
+		console.error('[ERROR] Failure while an attempt to edit the album.');
 		console.error(err);
 		res.status(200).json({success: false});
 	});
 }
 
 
+
+/**
+This function generates a new short ID and returns it as a http response
+
+@param {object} - http request object
+@param {object} - http response object
+*/
 exports.generateNewAlbumCode = function(req, res){
-	res.status(200).json({success: false, shortId: shortid.generate()});
+	try{
+		var shortId = shortid.generate();
+		res.status(200).json({success: false, shortId: shortid.generate()});
+	}catch(err){
+		console.error('[ERROR] Could not generate short ID');
+		console.error(err);
+		res.status(200).json({success: false});
+	}
 }
