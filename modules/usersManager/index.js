@@ -51,19 +51,20 @@ Retrieves list of user albums
 */
 exports.getUserAlbums = function(req, res){
 	 console.log("[LOG] GETTING USER ALBUMS");
-	 
+
 	 var promise = User.findById(req.body.userId).populate('albums').exec();
+
 		promise.then(function(userDoc){
 			console.log("[LOG] Album found");
 			res.status(200).json({success: true, data: userDoc.albums || []});
 		})
 		
 		//	Error handler
-		.catch(err){
+		.catch(function(err){
 			console.error("[ERROR] Could not find album");
 			console.error(err);
 			res.status(200).json({success: false});
-		}
+		});
 }
 
 
