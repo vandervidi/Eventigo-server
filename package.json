@@ -1,5 +1,5 @@
 {
-  "name": "snapify",
+  "name": "Eventigo",
   "version": "1.0.0",
   "description": "webService for a collaborative photo albums application",
   "main": "index.js",
@@ -13,9 +13,9 @@
   "author": "Vidran Abdovich",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/vandervidi/Snapify/issues"
+    "url": "https://github.com/vandervidi/Eventigo/issues"
   },
-  "homepage": "https://github.com/vandervidi/Snapify#readme",
+  "homepage": "https://github.com/vandervidi/Eventigo#readme",
   "dependencies": {
     "big-integer": "^1.6.7",
     "big-number": "^0.3.1",

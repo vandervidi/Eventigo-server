@@ -32,7 +32,7 @@ exports.register = function(req, res){
 		promise.then(function(userDoc){
 			console.log('[LOG] Registered new user');
 			res.status(200).json({'success': true, 'doc': userDoc});
-		});
+		})
 		
 		.catch(function(err){
 			console.error('[ERROR] : could not register the new user');
@@ -51,15 +51,19 @@ Retrieves list of user albums
 */
 exports.getUserAlbums = function(req, res){
 	 console.log("[LOG] GETTING USER ALBUMS");
-	 User.findById(req.body.userId).populate('albums').exec(function(err, userDoc){
-		if(!err){
+	 
+	 var promise = User.findById(req.body.userId).populate('albums').exec();
+		promise.then(function(userDoc){
 			console.log("[LOG] Album found");
 			res.status(200).json({success: true, data: userDoc.albums || []});
-		}else{
-			console.log("[ERROR] Could not find album");
+		})
+		
+		//	Error handler
+		.catch(err){
+			console.error("[ERROR] Could not find album");
+			console.error(err);
 			res.status(200).json({success: false});
 		}
-	}); 
 }
 
 
