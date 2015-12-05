@@ -33,7 +33,7 @@ var albumSchema = new Schema({
 
 			likes: [{ type: String, ref:'userM'}], // Array of users ID's
 			
-			comments: [{type: Schema.Types.ObjectId, ref: 'commentM'}]
+			comments: [{ type: String, ref:'commentM'}]
 
 	}],
 

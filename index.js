@@ -10,6 +10,7 @@
 
 var usersManager = require('./modules/usersManager');
 var albumsManager = require('./modules/albumsManager');
+var commentsManager = require('./modules/commentsManager');
 var bodyParser = require('body-parser');
 var express = require('express');
 var app = express();
@@ -71,7 +72,7 @@ app.post('/deleteAlbum', usersManager.deleteAlbum);
 app.post('/getPhotoFeed', albumsManager.getPhotoFeed);
 
 //	Get photo comments
-app.post('/getPhotoComments', albumsManager.getPhotoComments);
+app.post('/getPhotoComments', commentsManager.getPhotoComments);
 
 // Get album guest list
 app.post('/getAlbumGuests', albumsManager.getAlbumGuests);
@@ -84,3 +85,6 @@ app.post('/editAlbum', albumsManager.editAlbum);
 
 //	Generate a new album short ID
 app.get('/generateNewAlbumCode' ,albumsManager.generateNewAlbumCode);
+
+//	Generate a new album short ID
+app.post('/postComment' ,commentsManager.postComment);

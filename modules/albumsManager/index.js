@@ -74,10 +74,7 @@ exports.getAlbumById = function(req, res){
 
 	promise.then(function(albumDoc){
 		console.log("[LOG] Album found by id: " + req.body.albumId);
-
-		var jsDoc = albumDoc.toObject();	//	converting the document to a javascript object in order to manipulate it.
-		jsDoc.photos.reverse();
-		res.status(200).json({success: true, data: jsDoc});
+		res.status(200).json({success: true, data: albumDoc});
 	})
 	
 	//	Error handler
@@ -321,19 +318,6 @@ exports.getPhotoLikes = function(req, res){
 		res.status(200).json({success: false});
 	});
 }
-
-
-
-/**
-This function returns an album's comments
-
-@param {object} - http request object
-@param {object} - http response object
-*/
-exports.getPhotoComments = function(req, res){
-
-}
-
 
 
 /**
