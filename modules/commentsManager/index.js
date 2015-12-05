@@ -44,16 +44,18 @@ Returns photo comments
 */
 exports.getPhotoComments = function(req, res){
 console.log("[LOG] Getting comments!");
-   var promise = Comment.find(req.body.photoId).populate('postedBy').exec();
+console.log("[LOG] Requesting comments for photo: " + req.body.photoId);
+
+   var promise = Comment.find({photoId : req.body.photoId}).populate('postedBy').exec();
 
    promise.then(function(arrayOfCommentDocs){
-   		console.log("[LOG] Found comments for this photo!");
+   		console.log("[LOG] Found: " + arrayOfCommentDocs.length + " comments" );
    		res.status(200).json({success: true, comments: arrayOfCommentDocs });
    })
 
 	// Error handler
 	.catch(function(err){
-		console.error('[ERROR] Could not get photo likes');
+		console.error('[ERROR] Could not get photo comments');
 		console.error(err);
 		res.status(200).json({success: false});
 	});
