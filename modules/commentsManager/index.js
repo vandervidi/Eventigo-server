@@ -9,7 +9,7 @@ posts a comment in a photo
 */
 exports.postComment = function(req, res){
    console.log("[LOG] Creating a new comment");
- 
+   console.log("Comment: " ,req.body.comment );
 	var comment = new Comment({
 		postedBy: req.body.userId,
 		contentText: req.body.comment,
