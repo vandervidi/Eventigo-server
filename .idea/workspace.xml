@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="266337be-986a-413e-8bea-7f1c9c0c94e3" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/modules/usersManager/index.js" afterPath="$PROJECT_DIR$/modules/usersManager/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Eventigo-server.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,8 +38,8 @@
       <file leaf-file-name="index.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/modules/usersManager/index.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.09981167">
-              <caret line="20" column="79" selection-start-line="20" selection-start-column="79" selection-end-line="20" selection-end-column="79" />
+            <state vertical-scroll-proportion="0.15065913">
+              <caret line="21" column="56" selection-start-line="21" selection-start-column="56" selection-end-line="21" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -285,8 +284,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/modules/usersManager/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09981167">
-          <caret line="20" column="79" selection-start-line="20" selection-start-column="79" selection-end-line="20" selection-end-column="79" />
+        <state vertical-scroll-proportion="0.15065913">
+          <caret line="21" column="56" selection-start-line="21" selection-start-column="56" selection-end-line="21" selection-end-column="56" />
           <folding />
         </state>
       </provider>
