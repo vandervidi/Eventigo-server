@@ -19,7 +19,7 @@ exports.register = function(req, res){
 	var update = {
 		'_id': req.body.userInfo.id ,  					// Facebook userID
 		'name': req.body.userInfo.name, 				// user's Facebook name
-		'profilePicture': "https://graph.facebook.com/ " + req.body.userInfo.profilePic +" /picture", // Facebook user profile picture URL
+		'profilePicture': "https://graph.facebook.com/ " + req.body.userInfo.id +" /picture", // Facebook user profile picture URL
 	};
 
 	var options = {
